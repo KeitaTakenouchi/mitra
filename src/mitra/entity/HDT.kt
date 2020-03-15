@@ -18,6 +18,10 @@ class HDNode(tag: Tag, vararg val children: HDT) : HDT(tag) {
         }
     }
 
+    fun children(tag: Tag): List<HDT> {
+        return children.filter { it.tag == tag }.toList()
+    }
+
     override fun dumpTree(): String {
         val ret = StringBuilder()
         ret.append("<$tag>\n")
