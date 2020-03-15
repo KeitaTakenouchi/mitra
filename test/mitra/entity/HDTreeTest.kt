@@ -8,16 +8,16 @@ internal class HDTreeTest {
     fun dumpTree01() {
         val tree = HDNode("User",
                 HDNode("Person",
-                        HDTLeaf("id", "a"),
-                        HDTLeaf("name", "Alice"),
+                        HDLeaf("id", "a"),
+                        HDLeaf("name", "Alice"),
                         HDNode("Friendship",
                                 HDNode("Friend",
-                                        HDTLeaf("fid", "2"),
-                                        HDTLeaf("years", "3")
+                                        HDLeaf("fid", "2"),
+                                        HDLeaf("years", "3")
                                 ),
                                 HDNode("Friend",
-                                        HDTLeaf("fid", "4"),
-                                        HDTLeaf("years", "4")
+                                        HDLeaf("fid", "4"),
+                                        HDLeaf("years", "4")
                                 )
                         )
                 )

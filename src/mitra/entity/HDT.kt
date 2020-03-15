@@ -35,7 +35,7 @@ class HDNode(tag: Tag, vararg val children: HDT) : HDT(tag) {
     }
 }
 
-class HDTLeaf(tag: Tag, val data: Data) : HDT(tag) {
+class HDLeaf(tag: Tag, val data: Data) : HDT(tag) {
     override fun dumpTree(): String {
         return "<$tag>$data"
     }
