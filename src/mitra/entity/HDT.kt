@@ -9,18 +9,19 @@ sealed class HDT(val tag: String) {
 
 open class HDNode(tag: Tag, vararg val children: HDT) : HDT(tag) {
     override fun dumpTree(): String {
-        var ret = "<$tag>\n"
+        val ret = StringBuilder()
+        ret.append("<$tag>\n")
 
         for (c in children.dropLast(1)) {
-            ret += "├──" + c.dumpTree().replace("\n", "\n│  ") + "\n"
+            ret.append("├──" + c.dumpTree().replace("\n", "\n│  ") + "\n")
         }
-
+        
         run {
             val c = children.last()
-            ret += "└──" + c.dumpTree().replace("\n", "\n   ")
+            ret.append("└──" + c.dumpTree().replace("\n", "\n   "))
         }
 
-        return ret
+        return ret.toString()
     }
 }
 
