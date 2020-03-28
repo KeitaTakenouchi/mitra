@@ -101,4 +101,19 @@ internal class NodeExtractorTest {
         }
     }
 
+    @Test
+    fun testNodeExtractor01() {
+        val l1 = HDLeaf("TAG", "foo")
+        val p1 = HDNode("PARENT", l1)
+
+        val env = Env()
+        env.targetNode = p1
+
+        run {
+           val node = ParentOf(ChildOf(TargetNode, "TAG", 0)).eval(env)
+            assertEquals(p1, node)
+        }
+
+    }
+
 }
