@@ -3,6 +3,66 @@ package mitra.dsl
 import mitra.entity.*
 
 
+sealed class Predicate {
+    abstract fun eval(env: Env): Boolean
+}
+
+class ComparisonConst(val left: NodePointer, val binOp: BinOp, val right: Data) : Predicate() {
+    override fun eval(env: Env): Boolean {
+        val node = left.eval(env) ?: return false
+
+        val left = when (node) {
+            is HDNode -> return false
+            is HDLeaf -> node.data
+        }
+
+        return binOp.eval(left, right)
+    }
+}
+
+class ComparisonNodes(val left: NodePointer, val binOp: BinOp, val right: NodePointer) : Predicate() {
+    override fun eval(env: Env): Boolean {
+        val nodeL = left.eval(env) ?: return false
+        val nodeR = right.eval(env) ?: return false
+
+        return when (nodeL) {
+            is HDLeaf -> {
+                when (nodeR) {
+                    is HDLeaf -> (binOp.eval(nodeL.data, nodeR.data))
+                    is HDNode -> false // leaf <-> node
+                }
+            }
+            is HDNode -> {
+                when (nodeR) {
+                    is HDLeaf -> false // node <-> leaf
+                    is HDNode -> (nodeL === nodeR)
+                }
+            }
+        }
+    }
+}
+
+class AND(val left: Predicate, val right: Predicate) : Predicate() {
+    override fun eval(env: Env): Boolean = (left.eval(env) and right.eval(env))
+}
+
+class OR(val left: Predicate, val right: Predicate) : Predicate() {
+    override fun eval(env: Env): Boolean = (left.eval(env) or right.eval(env))
+}
+
+class NOT(val pred: Predicate) : Predicate() {
+    override fun eval(env: Env): Boolean = (!pred.eval(env))
+}
+
+class NodePointer(val extractor: NodeExtractor, val index: Int) {
+    fun eval(env: Env): HDT? {
+        env.targetNode = env.targetRecord!!.item[index]
+        val node = extractor.eval(env)
+        env.targetNode = null
+        return node
+    }
+}
+
 enum class BinOp {
     EQ {
         override fun eval(left: Data, right: Data): Boolean = (left == right)

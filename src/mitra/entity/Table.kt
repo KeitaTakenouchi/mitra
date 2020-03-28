@@ -12,7 +12,7 @@ class Table(vararg val records: Record) {
     }
 }
 
-class Record(vararg val item: Data) {
+class Record(vararg val item: HDT) {
     override fun toString(): String {
         return "(" + item.joinToString(", ") + ")"
     }
