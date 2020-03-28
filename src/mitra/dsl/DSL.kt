@@ -1,9 +1,30 @@
 package mitra.dsl
 
-import mitra.entity.HDLeaf
-import mitra.entity.HDNode
-import mitra.entity.HDT
-import mitra.entity.Tag
+import mitra.entity.*
+
+
+enum class BinOp {
+    EQ {
+        override fun eval(left: Data, right: Data): Boolean = (left == right)
+    },
+    NEQ {
+        override fun eval(left: Data, right: Data): Boolean = (left != right)
+    },
+    LT {
+        override fun eval(left: Data, right: Data): Boolean = (left < right)
+    },
+    LE {
+        override fun eval(left: Data, right: Data): Boolean = (left <= right)
+    },
+    GT {
+        override fun eval(left: Data, right: Data): Boolean = (left > right)
+    },
+    GE {
+        override fun eval(left: Data, right: Data): Boolean = (left >= right)
+    };
+
+    abstract fun eval(left: Data, right: Data): Boolean
+}
 
 sealed class NodeExtractor {
     abstract fun eval(env: Env): HDT?
