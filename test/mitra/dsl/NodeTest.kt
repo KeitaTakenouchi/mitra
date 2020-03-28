@@ -29,22 +29,22 @@ internal class NodeExtractorTest {
         val env = Env()
         run {
             env.targetNode = l1
-            val node = NodeParent(TargetNode).eval(env)
+            val node = ParentOf(TargetNode).eval(env)
             assertEquals(p1, node)
         }
         run {
             env.targetNode = l2
-            val node = NodeParent(TargetNode).eval(env)
+            val node = ParentOf(TargetNode).eval(env)
             assertEquals(p1, node)
         }
         run {
             env.targetNode = l3
-            val node = NodeParent(TargetNode).eval(env)
+            val node = ParentOf(TargetNode).eval(env)
             assertEquals(p1, node)
         }
         run {
             env.targetNode = p1
-            val node = NodeParent(TargetNode).eval(env)
+            val node = ParentOf(TargetNode).eval(env)
             assertNull(node)
         }
     }
@@ -60,19 +60,19 @@ internal class NodeExtractorTest {
         env.targetNode = p1
 
         run {
-            val node = NodeChild(TargetNode, "TAG", 0).eval(env)
+            val node = ChildOf(TargetNode, "TAG", 0).eval(env)
             assertEquals(l1, node)
         }
         run {
-            val node = NodeChild(TargetNode, "TAG", 1).eval(env)
+            val node = ChildOf(TargetNode, "TAG", 1).eval(env)
             assertEquals(l2, node)
         }
         run {
-            val node = NodeChild(TargetNode, "TAG", 2).eval(env)
+            val node = ChildOf(TargetNode, "TAG", 2).eval(env)
             assertEquals(l3, node)
         }
         run {
-            val node = NodeChild(TargetNode, "TAG", 10).eval(env)
+            val node = ChildOf(TargetNode, "TAG", 10).eval(env)
             assertNull(node)
         }
     }
@@ -88,15 +88,15 @@ internal class NodeExtractorTest {
         env.targetNode = p1
 
         run {
-            val node = NodeChild(TargetNode, "TAG", 0).eval(env)
+            val node = ChildOf(TargetNode, "TAG", 0).eval(env)
             assertEquals(l1, node)
         }
         run {
-            val node = NodeChild(TargetNode, "TAG", 1).eval(env)
+            val node = ChildOf(TargetNode, "TAG", 1).eval(env)
             assertEquals(l3, node)
         }
         run {
-            val node = NodeChild(TargetNode, "TAG", 2).eval(env)
+            val node = ChildOf(TargetNode, "TAG", 2).eval(env)
             assertNull(node)
         }
     }

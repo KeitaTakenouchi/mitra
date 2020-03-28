@@ -19,7 +19,7 @@ object TargetNode : NodeExtractor() {
 
 }
 
-class NodeParent(val node: NodeExtractor) : NodeExtractor() {
+class ParentOf(val node: NodeExtractor) : NodeExtractor() {
 
     override fun eval(env: Env): HDT? {
         return node.eval(env)?.parent
@@ -27,7 +27,7 @@ class NodeParent(val node: NodeExtractor) : NodeExtractor() {
 
 }
 
-class NodeChild(val node: NodeExtractor, val tag: Tag, val pos: Int) : NodeExtractor() {
+class ChildOf(val node: NodeExtractor, val tag: Tag, val pos: Int) : NodeExtractor() {
 
     override fun eval(env: Env): HDT? {
         return when (val n = node.eval(env)) {
