@@ -18,7 +18,7 @@ internal class ColumnExtractorTest {
         val env = Env()
         env.rootNode = root
 
-        val result = TargetNodes.eval(env)
+        val result = RootNode.eval(env)
         assertEquals(1, result.size)
         assertSame(root, result[0])
     }
@@ -33,7 +33,7 @@ internal class ColumnExtractorTest {
         val env = Env()
         env.rootNode = root
 
-        val tree = ChildrenOf(TargetNodes, "tag")
+        val tree = ChildrenOf(RootNode, "tag")
         val result = tree.eval(env)
         assertEquals(3, result.size)
         assertSame(l1, result[0])
@@ -58,7 +58,7 @@ internal class ColumnExtractorTest {
         val tree =
                 ChildrenOf(
                         ChildrenOf(
-                                TargetNodes
+                                RootNode
                                 , "tag")
                         , "tag")
 
@@ -81,7 +81,7 @@ internal class ColumnExtractorTest {
         env.rootNode = root
 
         val tree = PChildrenOf(
-                TargetNodes
+                RootNode
                 , "tag"
                 , 1
         )
@@ -107,7 +107,7 @@ internal class ColumnExtractorTest {
 
         val tree = PChildrenOf(
                 ChildrenOf(
-                        TargetNodes
+                        RootNode
                         , "tag"
                 )
                 , "tag"
@@ -135,7 +135,7 @@ internal class ColumnExtractorTest {
         env.rootNode = root
 
         val tree = DescendantsOf(
-                TargetNodes,
+                RootNode,
                 "tag"
         )
 
@@ -164,7 +164,7 @@ internal class ColumnExtractorTest {
 
         run {
             val tree = DescendantsOf(
-                    TargetNodes,
+                    RootNode,
                     "non-leaf"
             )
 
@@ -176,7 +176,7 @@ internal class ColumnExtractorTest {
 
         run {
             val tree = DescendantsOf(
-                    TargetNodes,
+                    RootNode,
                     "leaf"
             )
 

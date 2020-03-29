@@ -19,7 +19,7 @@ internal class TableExtractorTest {
         env.rootNode = root
 
         val column = Column(
-                ChildrenOf(TargetNodes, "tag")
+                ChildrenOf(RootNode, "tag")
         )
         val table = column.eval(env)
 
@@ -46,8 +46,8 @@ internal class TableExtractorTest {
         env.rootNode = root
 
         val column = Product(
-                Column(DescendantsOf(TargetNodes, "tag")),
-                Column(DescendantsOf(TargetNodes, "node"))
+                Column(DescendantsOf(RootNode, "tag")),
+                Column(DescendantsOf(RootNode, "node"))
         )
         val table = column.eval(env)
 

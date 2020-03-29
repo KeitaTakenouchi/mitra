@@ -30,7 +30,7 @@ sealed class ColumnExtractor {
     abstract fun eval(env: Env): List<HDT>
 }
 
-object TargetNodes : ColumnExtractor() {
+object RootNode : ColumnExtractor() {
 
     override fun eval(env: Env): List<HDT> {
         return listOf(env.rootNode!!)
