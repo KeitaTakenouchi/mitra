@@ -11,7 +11,7 @@ class Table(vararg val records: Record) {
         }
         return Table(*recs.toTypedArray())
     }
-    
+
     fun dumpTable(): String {
         val ret = StringBuilder()
 
@@ -25,7 +25,9 @@ class Table(vararg val records: Record) {
 }
 
 class Record(vararg val item: HDT) {
+    
     override fun toString(): String {
-        return "(" + item.joinToString(", ") + ")"
+        return "(" + item.joinToString(", ") { """[${it.id}]<${it.tag}>""" } + ")"
     }
+
 }

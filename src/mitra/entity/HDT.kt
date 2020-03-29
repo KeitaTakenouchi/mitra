@@ -5,6 +5,16 @@ package mitra.entity
  */
 sealed class HDT(val tag: String) {
     var parent: HDNode? = null
+    val id: Int
+
+    init {
+        id = IdCounter
+        IdCounter++
+    }
+
+    companion object {
+        var IdCounter = 0
+    }
 
     abstract fun traverse(callback: (HDT) -> Unit)
 
@@ -41,7 +51,7 @@ class HDNode(tag: Tag, vararg val children: HDT) : HDT(tag) {
 
     override fun dumpTree(): String {
         val ret = StringBuilder()
-        ret.append("<$tag>\n")
+        ret.append("[$id]<$tag>\n")
 
         for (c in children.dropLast(1)) {
             ret.append("├──" + c.dumpTree().replace("\n", "\n│  ") + "\n")
@@ -63,7 +73,7 @@ class HDLeaf(tag: Tag, val data: Data) : HDT(tag) {
     }
 
     override fun dumpTree(): String {
-        return "<$tag>$data"
+        return "[$id]<$tag>$data"
     }
 }
 
