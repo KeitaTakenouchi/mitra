@@ -7,9 +7,11 @@ sealed class ColumnExtractor {
 }
 
 object TargetNodes : ColumnExtractor() {
+
     override fun eval(env: Env): List<HDT> {
         return listOf(env.rootNode!!)
     }
+
 }
 
 class ChildrenOf(val extractor: ColumnExtractor, val tag: Tag) : ColumnExtractor() {
@@ -24,15 +26,18 @@ class ChildrenOf(val extractor: ColumnExtractor, val tag: Tag) : ColumnExtractor
 }
 
 class PChildrenOf(val extractor: ColumnExtractor, val tag: Tag, val pos: Int) : ColumnExtractor() {
+
     override fun eval(env: Env): List<HDT> {
         val nodes = extractor.eval(env)
         return nodes
                 .filterIsInstance<HDNode>()
                 .mapNotNull { it.pchild(tag, pos) }
     }
+
 }
 
 class DescendantsOf(val extractor: ColumnExtractor, val tag: Tag) : ColumnExtractor() {
+
     override fun eval(env: Env): List<HDT> {
         val nodes = extractor.eval(env)
 
@@ -48,6 +53,7 @@ class DescendantsOf(val extractor: ColumnExtractor, val tag: Tag) : ColumnExtrac
         }
         return ret
     }
+
 }
 
 sealed class Predicate {
@@ -55,6 +61,7 @@ sealed class Predicate {
 }
 
 class ComparisonConst(val left: NodePointer, val binOp: BinOp, val right: Data) : Predicate() {
+
     override fun eval(env: Env): Boolean {
         val node = left.eval(env) ?: return false
 
@@ -65,9 +72,11 @@ class ComparisonConst(val left: NodePointer, val binOp: BinOp, val right: Data) 
 
         return binOp.eval(left, right)
     }
+
 }
 
 class ComparisonNodes(val left: NodePointer, val binOp: BinOp, val right: NodePointer) : Predicate() {
+
     override fun eval(env: Env): Boolean {
         val nodeL = left.eval(env) ?: return false
         val nodeR = right.eval(env) ?: return false
@@ -87,6 +96,7 @@ class ComparisonNodes(val left: NodePointer, val binOp: BinOp, val right: NodePo
             }
         }
     }
+
 }
 
 class AND(val left: Predicate, val right: Predicate) : Predicate() {
@@ -102,12 +112,14 @@ class NOT(val pred: Predicate) : Predicate() {
 }
 
 class NodePointer(val extractor: NodeExtractor, val index: Int) {
+
     fun eval(env: Env): HDT? {
         env.targetNode = env.targetRecord!!.item[index]
         val node = extractor.eval(env)
         env.targetNode = null
         return node
     }
+
 }
 
 enum class BinOp {
