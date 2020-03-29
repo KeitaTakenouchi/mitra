@@ -6,6 +6,8 @@ package mitra.entity
 sealed class HDT(val tag: String) {
     var parent: HDNode? = null
 
+    abstract fun traverse(callback: (HDT) -> Unit)
+
     abstract fun dumpTree(): String
 }
 
@@ -20,6 +22,21 @@ class HDNode(tag: Tag, vararg val children: HDT) : HDT(tag) {
 
     fun children(tag: Tag): List<HDT> {
         return children.filter { it.tag == tag }.toList()
+    }
+
+    fun pchild(tag: Tag, pos: Int): HDT? {
+        val cs = children(tag)
+        if (pos > cs.lastIndex) {
+            return null
+        }
+        return cs[pos]
+    }
+
+    override fun traverse(callback: (HDT) -> Unit) {
+        callback(this)
+        for (c in children) {
+            c.traverse(callback)
+        }
     }
 
     override fun dumpTree(): String {
@@ -40,6 +57,11 @@ class HDNode(tag: Tag, vararg val children: HDT) : HDT(tag) {
 }
 
 class HDLeaf(tag: Tag, val data: Data) : HDT(tag) {
+
+    override fun traverse(callback: (HDT) -> Unit) {
+        callback(this)
+    }
+
     override fun dumpTree(): String {
         return "<$tag>$data"
     }
