@@ -2,6 +2,53 @@ package mitra.dsl
 
 import mitra.entity.*
 
+sealed class ColumnExtractor {
+    abstract fun eval(env: Env): List<HDT>
+}
+
+object TargetNodes : ColumnExtractor() {
+    override fun eval(env: Env): List<HDT> {
+        return listOf(env.rootNode!!)
+    }
+}
+
+class ChildrenOf(val extractor: ColumnExtractor, val tag: Tag) : ColumnExtractor() {
+
+    override fun eval(env: Env): List<HDT> {
+        val nodes = extractor.eval(env)
+        return nodes
+                .filterIsInstance<HDNode>()
+                .flatMap { it.children(tag) }
+    }
+
+}
+
+class PChildrenOf(val extractor: ColumnExtractor, val tag: Tag, val pos: Int) : ColumnExtractor() {
+    override fun eval(env: Env): List<HDT> {
+        val nodes = extractor.eval(env)
+        return nodes
+                .filterIsInstance<HDNode>()
+                .mapNotNull { it.pchild(tag, pos) }
+    }
+}
+
+class DescendantsOf(val extractor: ColumnExtractor, val tag: Tag) : ColumnExtractor() {
+    override fun eval(env: Env): List<HDT> {
+        val nodes = extractor.eval(env)
+
+        val ret = mutableListOf<HDT>()
+        for (n in nodes) {
+            n.traverse {
+                // ignore itself
+                if (it == n) return@traverse
+                if (it.tag == tag) {
+                    ret.add(it)
+                }
+            }
+        }
+        return ret
+    }
+}
 
 sealed class Predicate {
     abstract fun eval(env: Env): Boolean
@@ -114,13 +161,7 @@ class ChildOf(val node: NodeExtractor, val tag: Tag, val pos: Int) : NodeExtract
         return when (val n = node.eval(env)) {
             null -> null
             is HDLeaf -> null
-            is HDNode -> {
-                val cs = n.children(tag)
-                if (pos > cs.lastIndex) {
-                    return null
-                }
-                return cs[pos]
-            }
+            is HDNode -> n.pchild(tag, pos)
         }
     }
 
