@@ -2,6 +2,24 @@ package mitra.dsl
 
 import mitra.entity.*
 
+class Program(val table: TableExtractor, val pred: Predicate) {
+
+    fun eval(root: HDT): Table {
+        val env = Env()
+        env.rootNode = root
+        val table = table.eval(env)
+
+        val recs = table.records.filter {
+            env.targetRecord = it
+            pred.eval(env)
+        }.toTypedArray()
+        env.targetRecord = null
+        
+        return Table(*recs)
+    }
+
+}
+
 sealed class TableExtractor {
     abstract fun eval(env: Env): Table
 }
