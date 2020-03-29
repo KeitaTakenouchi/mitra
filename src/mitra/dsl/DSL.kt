@@ -2,6 +2,30 @@ package mitra.dsl
 
 import mitra.entity.*
 
+sealed class TableExtractor {
+    abstract fun eval(env: Env): Table
+}
+
+class Column(val extractor: ColumnExtractor) : TableExtractor() {
+
+    override fun eval(env: Env): Table {
+        val nodes = extractor.eval(env)
+        val recs = nodes.map { Record(it) }.toTypedArray()
+        return Table(*recs)
+    }
+
+}
+
+class Product(val extractorL: TableExtractor, val extractorR: TableExtractor) : TableExtractor() {
+
+    override fun eval(env: Env): Table {
+        val tableL = extractorL.eval(env)
+        val tableR = extractorR.eval(env)
+        return tableL.join(tableR)
+    }
+
+}
+
 sealed class ColumnExtractor {
     abstract fun eval(env: Env): List<HDT>
 }
